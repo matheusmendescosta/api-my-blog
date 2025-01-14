@@ -3,3 +3,7 @@
 /node_modules
 
 .env
+
+/init-postgres
+
+/volumes

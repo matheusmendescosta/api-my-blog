@@ -2,8 +2,15 @@ import "dotenv/config";
 import { z } from "zod";
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(["dev", "test", "production"]).default("dev"),
-  PORT: z.coerce.number().default(3333),
+  NODE_ENV: z.enum(["dev", "test", "production"]),
+  API_PORT: z.coerce.number(),
+  POSGRESDB_VOLUME_PATH: z.string(),
+  POSTGRES_PORT: z.number(),
+  POSTGRES_USER: z.string(),
+  POSTGRES_PASSWORD: z.string(),
+  PGADMIN_DEFAULT_EMAIL: z.string().email(),
+  PGADMIN_DEFAULT_PASSWORD: z.string(),
+  PGADMIN_LISTEN_PORT: z.number()
 });
 
 const _env = envSchema.safeParse(process.env);
