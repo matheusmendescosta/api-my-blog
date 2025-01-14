@@ -1,5 +1,5 @@
-import { UserRepository } from "@/repositories/user-repository";
-import { Role, User } from "@prisma/client";
+import { UserRepository } from '@/repositories/user-repository';
+import { Role, User } from '@prisma/client';
 
 interface CreateUserServiceRequest {
   name: string;
@@ -15,12 +15,7 @@ interface CreateUserServiceResponse {
 export class CreateUserService {
   constructor(private userRepository: UserRepository) {}
 
-  async execute({
-    name,
-    email,
-    password,
-    role,
-  }: CreateUserServiceRequest): Promise<CreateUserServiceResponse> {
+  async execute({ name, email, password, role }: CreateUserServiceRequest): Promise<CreateUserServiceResponse> {
     const user = await this.userRepository.create({
       name,
       email,
