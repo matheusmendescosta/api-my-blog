@@ -7,7 +7,7 @@
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "build": "tsup src --out-dir dist",
-    "lint": "eslint src"
+    "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "keywords": [],
   "author": "",
@@ -21,10 +21,14 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@eslint/js": "^9.18.0",
     "@types/express": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",
-    "eslint": "^9.18.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "globals": "^15.14.0",
     "prisma": "^6.2.1",
     "ts-node": "^10.9.2",
     "tsup": "^8.2.4",
