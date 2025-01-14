@@ -1,8 +1,8 @@
-import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";
-import { CreateUserService } from "@/services/user/create-user-service";
-import { Role } from "@prisma/client";
-import { Request, Response } from "express";
-import { z, ZodError } from "zod";
+import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository';
+import { CreateUserService } from '@/services/user/create-user-service';
+import { Role } from '@prisma/client';
+import { Request, Response } from 'express';
+import { z, ZodError } from 'zod';
 
 const bodySchema = z.object({
   name: z.string(),
@@ -11,10 +11,7 @@ const bodySchema = z.object({
   role: z.nativeEnum(Role),
 });
 
-export async function CreateUserController(
-  request: Request,
-  response: Response
-) {
+export const CreateUserController = async (request: Request, response: Response) => {
   try {
     const body = bodySchema.parse(request.body);
     const createUserService = new CreateUserService(new PrismaUserRepository());
@@ -24,11 +21,11 @@ export async function CreateUserController(
   } catch (error) {
     if (error instanceof ZodError) {
       return response.status(400).json({
-        error: "validation error",
+        error: 'validation error',
         details: error.errors,
       });
     }
 
-    return response.status(500).json({ error: "Internal server error" });
+    return response.status(500).json({ error: 'Internal server error' });
   }
-}
+};
