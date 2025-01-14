@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   env: {
     browser: true,
     es2021: true,
@@ -9,7 +9,7 @@ export default {
       env: {
         node: true,
       },
-      files: ['**/*.ts'],
+      files: ['.eslintrc.{js,cjs}'],
       parserOptions: {
         sourceType: 'script',
       },
@@ -73,5 +73,4 @@ export default {
     yoda: 'error',
     'max-len': ['error', { code: 140 }],
   },
-  ignores: ['**/.volumes/**'],
 };
