@@ -7,3 +7,5 @@
 /init-postgres
 
 /volumes
+
+/.volumes
