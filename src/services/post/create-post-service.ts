@@ -6,6 +6,8 @@ interface CreatePostServiceRequest {
   slug: string;
   content: string;
   status: PostStatus;
+  authorId: string;
+  categoryId: string;
 }
 
 interface CreatePostServiceResponse {
@@ -15,8 +17,8 @@ interface CreatePostServiceResponse {
 export class CreatePostService {
   constructor(private postRepository: PostRepository) {}
 
-  async execute({ title, slug, content, status }: CreatePostServiceRequest): Promise<CreatePostServiceResponse> {
-    const { post } = this.postRepository.create({ title, slug, content, status });
+  async execute({ title, slug, content, status, authorId, categoryId }: CreatePostServiceRequest): Promise<CreatePostServiceResponse> {
+    const post = await this.postRepository.create({ title, slug, content, status, authorId, categoryId });
 
     return { post };
   }
