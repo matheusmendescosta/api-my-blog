@@ -22,7 +22,7 @@ export const CreateTagController = async (request: Request, response: Response) 
         details: error.errors,
       });
     }
-    console.log(error);
+
     return response.status(500).json({ message: 'Internal server error' });
   }
 };

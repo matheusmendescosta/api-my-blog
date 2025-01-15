@@ -1,5 +1,5 @@
 import { PrismaPostRepository } from '@/repositories/prisma/prisma-post-repository';
-import { CreatePostService } from '@/services/post/create-post-service';
+import { CreatePostService } from '@/services/post/post-create-service';
 import { PostStatus } from '@prisma/client';
 import { Request, Response } from 'express';
 import { z, ZodError } from 'zod';
@@ -16,7 +16,7 @@ const bodySchema = z.object({
   categoryId: z.string(),
 });
 
-export const CreatePostController = async (request: Request, response: Response) => {
+export const PostCreateController = async (request: Request, response: Response) => {
   try {
     const params = routeSchema.parse(request.params);
     const body = bodySchema.parse(request.body);
@@ -31,7 +31,7 @@ export const CreatePostController = async (request: Request, response: Response)
         details: error.errors,
       });
     }
-    console.log(error)
+
     return response.status(500).json({ message: 'Internal server error' });
   }
 };
