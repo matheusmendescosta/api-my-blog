@@ -20,6 +20,12 @@ export const PostCreateController = async (request: Request, response: Response)
   try {
     const params = routeSchema.parse(request.params);
     const body = bodySchema.parse(request.body);
+    const authorId = request.user?.id;
+
+    if (!authorId) {
+      return response.status(401).json({ message: 'Unauthorized' });
+    }
+
     const createPostService = new CreatePostService(new PrismaPostRepository());
     const { post } = await createPostService.execute({ ...body, authorId: params.authorId });
 

@@ -4,6 +4,8 @@ import { z } from 'zod';
 const envSchema = z.object({
   NODE_ENV: z.enum(['dev', 'test', 'production']),
   API_PORT: z.coerce.number(),
+  PRISMA_STUDIO_PORT: z.coerce.number(),
+  JWT_SECRET: z.string(),
   POSGRESDB_VOLUME_PATH: z.string(),
   POSTGRES_PORT: z.coerce.number(),
   POSTGRES_USER: z.string(),
