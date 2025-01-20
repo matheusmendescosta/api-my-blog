@@ -1,9 +1,7 @@
 import { PrismaPostRepository } from '@/repositories/prisma/prisma-post-repository';
 import { ListPostService } from '@/services/post/post-list-service';
 import { Request, Response } from 'express';
-import { z, ZodError } from 'zod';
-
-const searchParams = z.object({});
+import { ZodError } from 'zod';
 
 export const PostListController = async (request: Request, response: Response) => {
   try {
