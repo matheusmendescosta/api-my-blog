@@ -13,6 +13,7 @@ const envSchema = z.object({
   PGADMIN_DEFAULT_EMAIL: z.string().email(),
   PGADMIN_DEFAULT_PASSWORD: z.string(),
   PGADMIN_LISTEN_PORT: z.coerce.number(),
+  DATABASE_URL: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

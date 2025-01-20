@@ -1,17 +1,28 @@
 FROM node:20.3.1-alpine
 
+# Adiciona dependências necessárias
 RUN apk --no-cache add curl
 
+# Define o diretório de trabalho
 WORKDIR /opt/app
 
-COPY package.json package-lock.json ./
-RUN rm -rf node_modules && \
-    npm i
+# Copia os arquivos de dependências
+COPY ../package.json ../package-lock.json ./
 
-COPY prisma ./prisma
+# Instala as dependências
+RUN npm i
 
-COPY . .
+# Copia os arquivos do Prisma
+COPY ../prisma ./prisma
 
+# Copia o restante dos arquivos
+COPY ../. .
+
+# Gera os arquivos do Prisma
 RUN npx prisma generate
 
-CMD ["npm", "run", "dev"]
+# Gera o build da aplicação
+RUN npm run build
+
+# Define o comando de inicialização
+CMD ["npm", "run", "start"]
