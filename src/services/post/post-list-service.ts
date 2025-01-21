@@ -1,7 +1,10 @@
 import { PostRepository } from '@/repositories/post-repository';
 import { Post } from '@prisma/client';
 
-interface ListPostServiceRequest {}
+interface ListPostServiceRequest {
+  offset?: number;
+  limit?: number;
+}
 
 interface ListPostServiceResponse {
   posts: Post[];
@@ -10,8 +13,8 @@ interface ListPostServiceResponse {
 export class ListPostService {
   constructor(private postRepository: PostRepository) {}
 
-  async execute({}: ListPostServiceRequest): Promise<ListPostServiceResponse> {
-    const posts = await this.postRepository.list();
+  async execute({ offset, limit }: ListPostServiceRequest): Promise<ListPostServiceResponse> {
+    const posts = await this.postRepository.list(offset, limit);
 
     return { posts };
   }

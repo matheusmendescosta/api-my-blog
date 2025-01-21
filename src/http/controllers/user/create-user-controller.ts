@@ -1,5 +1,5 @@
 import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository';
-import { CreateUserService } from '@/services/user/create-user-service';
+import { CreateUserService } from '@/services/user/user-create-service';
 import { Role } from '@prisma/client';
 import { Request, Response } from 'express';
 import { z, ZodError } from 'zod';

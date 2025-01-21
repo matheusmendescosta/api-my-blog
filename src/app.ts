@@ -6,6 +6,7 @@ import likeRoute from './http/controllers/like/route';
 import postRoute from './http/controllers/post/route';
 import tagRoute from './http/controllers/tag/route';
 import userRoute from './http/controllers/user/route';
+import authRoute from './http/routes/route';
 
 const app = express();
 
@@ -20,6 +21,8 @@ app.use(baseUrl + 'health', (_, response) => {
     message: 'health',
   });
 });
+
+app.use(baseUrl, authRoute);
 app.use(baseUrl, userRoute);
 app.use(baseUrl, categoryRoute);
 app.use(baseUrl, postRoute);
