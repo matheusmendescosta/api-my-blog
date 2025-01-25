@@ -6,7 +6,7 @@ interface UserGetServiceRequest {
 }
 
 interface UserGetServiceResponse {
-  user: User | null;
+  user: Omit<User, 'password'> | null;
 }
 
 export class UserGetService {
