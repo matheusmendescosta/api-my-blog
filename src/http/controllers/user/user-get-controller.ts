@@ -14,14 +14,7 @@ const UserGetController = async (request: Request, response: Response) => {
 
     const user = await userGetService.execute({ id: params.id });
 
-    return response.status(200).json({
-      id: user.user?.id,
-      name: user.user?.name,
-      email: user.user?.email,
-      role: user.user?.role,
-      createAt: user.user?.createdAt,
-      updateAt: user.user?.updatedAt,
-    });
+    return response.status(200).json(user);
   } catch (error) {
     console.log(error);
 
