@@ -19,9 +19,10 @@ const UserListController = async (request: Request, response: Response) => {
     });
 
     return response.status(200).json({
-      totalCount: users.users.totalCount,
+      hasMore: users.users.hasMore,
       offset: users.users.offset,
       limit: users.users.limit,
+      totalCount: users.users.totalCount,
       users: users.users.users,
     });
   } catch (error) {

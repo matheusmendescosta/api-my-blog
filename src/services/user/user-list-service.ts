@@ -11,6 +11,7 @@ interface UserListServiceResponse {
     totalCount: number;
     offset: number;
     limit: number;
+    hasMore: boolean;
     users: Omit<User, 'password'>[];
   };
 }
