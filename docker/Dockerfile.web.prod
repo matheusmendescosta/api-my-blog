@@ -10,7 +10,7 @@ RUN npm i
 
 COPY ../prisma ./prisma
 
-COPY ../. .
+COPY ../ ./
 
 RUN npx prisma generate
 
