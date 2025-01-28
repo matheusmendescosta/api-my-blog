@@ -4,13 +4,13 @@ RUN apk --no-cache add curl
 
 WORKDIR /opt/app
 
-COPY ../package.json ../package-lock.json ./
+COPY package.json package-lock.json ./
 
 RUN npm i
 
-COPY ../prisma ./prisma
+COPY prisma ./prisma
 
-COPY ../ ./
+COPY . .
 
 RUN npx prisma generate
 
