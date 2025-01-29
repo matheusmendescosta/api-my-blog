@@ -5,9 +5,9 @@ import { Request, Response } from 'express';
 import { z, ZodError } from 'zod';
 
 const bodySchema = z.object({
-  name: z.string(),
-  email: z.string(),
-  password: z.string(),
+  name: z.string().min(3),
+  email: z.string().email(),
+  password: z.string().min(6),
   role: z.nativeEnum(Role),
 });
 
@@ -17,12 +17,11 @@ export const CreateUserController = async (request: Request, response: Response)
     const createUserService = new CreateUserService(new PrismaUserRepository());
     const { user } = await createUserService.execute(body);
 
-    return response.status(201).json({ user });
+    return response.status(201).json({ user: { id: user.id, name: user.name, email: user.email, role: user.role } });
   } catch (error) {
     if (error instanceof ZodError) {
       return response.status(400).json({
-        error: 'validation error',
-        details: error.errors,
+        details: error.errors.map((error) => error.message),
       });
     }
 
