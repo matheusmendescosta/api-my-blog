@@ -7,6 +7,10 @@ interface TagListServiceRequest {
 }
 
 interface TagListServiceResponse {
+  totalCount: number;
+  hasMore: boolean;
+  offset: number;
+  limit: number;
   tags: Tag[];
 }
 
@@ -16,6 +20,6 @@ export class TagListService {
   async execute({ offset, limit }: TagListServiceRequest): Promise<TagListServiceResponse> {
     const tags = await this.tagRepository.list(offset, limit);
 
-    return { tags };
+    return tags;
   }
 }
