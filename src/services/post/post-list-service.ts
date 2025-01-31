@@ -7,7 +7,13 @@ interface ListPostServiceRequest {
 }
 
 interface ListPostServiceResponse {
-  posts: Post[];
+  posts: {
+    totalCount: number;
+    hasMore: boolean;
+    offset: number;
+    limit: number;
+    posts: Post[];
+  };
 }
 
 export class ListPostService {

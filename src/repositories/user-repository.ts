@@ -1,9 +1,9 @@
-import { Prisma, User } from '@prisma/client';
+import { Prisma, Role, User } from '@prisma/client';
 
 export interface UserRepository {
   create(data: Prisma.UserCreateInput): Promise<User>;
   findByEmail(email: string): Promise<User | null>;
-  findById(id: string): Promise<Omit<User, 'password'> | null>;
+  findById(id: string): Promise<{ name: string; id: string; email: string; role: Role; createdAt: Date; updatedAt: Date } | null>;
   findAll(
     offset?: number,
     limit?: number
