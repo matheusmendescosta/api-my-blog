@@ -16,9 +16,15 @@ export class PrismaPostRepository implements PostRepository {
 
     return post;
   }
+  async list(
+    offset: number = 1,
+    limit: number = 25
+  ): Promise<{ totalCount: number; hasMore: boolean; offset: number; limit: number; posts: Post[] }> {
+    const count = await prisma.post.count();
 
-  async list(): Promise<Post[]> {
     const posts = await prisma.post.findMany({
+      take: limit,
+      skip: (offset - 1) * limit,
       include: {
         _count: {
           select: { likes: true },
@@ -29,9 +35,12 @@ export class PrismaPostRepository implements PostRepository {
         createdAt: 'desc',
       },
     });
-    return posts;
-  }
+    const totalPages = Math.ceil(count / limit);
 
+    const hasMore = offset < totalPages;
+
+    return { totalCount: count, hasMore, offset, limit, posts };
+  }
   async create(data: Prisma.PostUncheckedCreateInput): Promise<Post> {
     const post = await prisma.post.create({ data });
 
