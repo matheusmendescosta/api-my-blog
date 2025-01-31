@@ -1,12 +1,17 @@
 import { UserRepository } from '@/repositories/user-repository';
-import { User } from '@prisma/client';
+import { Role } from '@prisma/client';
 
 interface UserGetServiceRequest {
   id: string;
 }
 
 interface UserGetServiceResponse {
-  user: Omit<User, 'password'> | null;
+  name: string;
+  id: string;
+  email: string;
+  role: Role;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export class UserGetService {
@@ -15,6 +20,10 @@ export class UserGetService {
   async execute({ id }: UserGetServiceRequest): Promise<UserGetServiceResponse> {
     const user = await this.userRepository.findById(id);
 
-    return { user };
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return user;
   }
 }
