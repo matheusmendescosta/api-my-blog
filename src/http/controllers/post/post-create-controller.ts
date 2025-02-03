@@ -14,6 +14,7 @@ const bodySchema = z.object({
   content: z.string(),
   status: z.nativeEnum(PostStatus),
   categoryId: z.string(),
+  tags: z.array(z.string()),
 });
 
 export const PostCreateController = async (request: Request, response: Response) => {
