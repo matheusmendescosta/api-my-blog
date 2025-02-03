@@ -11,6 +11,8 @@ export class PrismaPostRepository implements PostRepository {
           select: { likes: true },
         },
         comments: true,
+        category: true,
+        tags: true,
       },
     });
 
@@ -44,7 +46,7 @@ export class PrismaPostRepository implements PostRepository {
 
     return { totalCount: count, hasMore, offset, limit, posts };
   }
-  async create(data: Prisma.PostUncheckedCreateInput): Promise<Post> {
+  async create(data: Prisma.PostCreateInput): Promise<Post> {
     const post = await prisma.post.create({ data });
 
     return post;
