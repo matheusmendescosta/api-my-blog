@@ -64,6 +64,16 @@ services:
     networks:
       - backend-network
 
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:${MAILHOG_SMTP_PORT}
+      - 8025:${MAILHOG_HTTP_PORT}
+    networks:
+      - backend-network
+
 networks:
   backend-network:
     name: backend-network

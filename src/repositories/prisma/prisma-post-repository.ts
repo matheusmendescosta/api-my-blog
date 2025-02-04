@@ -32,7 +32,16 @@ export class PrismaPostRepository implements PostRepository {
           select: { likes: true },
         },
         comments: true,
-        author: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            createdAt: true,
+            updatedAt: true,
+            role: true,
+          },
+        },
         category: true,
         tags: true,
       },
