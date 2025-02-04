@@ -14,6 +14,12 @@ const envSchema = z.object({
   PGADMIN_DEFAULT_PASSWORD: z.string(),
   PGADMIN_LISTEN_PORT: z.coerce.number(),
   DATABASE_URL: z.string(),
+  HOST: z.string(),
+  PORT: z.coerce.number(),
+  USER: z.string(),
+  PASSWORD: z.string(),
+  MAILHOG_SMTP_PORT: z.string(),
+  MAILHOG_HTTP_PORT: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

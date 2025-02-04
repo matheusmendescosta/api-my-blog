@@ -1,3 +1,4 @@
+import { sendWelcomeEmail } from '@/lib/nodemailer';
 import { UserRepository } from '@/repositories/user-repository';
 import { Role, User } from '@prisma/client';
 import { hash } from 'bcryptjs';
@@ -25,6 +26,8 @@ export class CreateUserService {
       password: passwordHash,
       role,
     });
+
+    await sendWelcomeEmail(user.name, user.email);
 
     return { user };
   }
