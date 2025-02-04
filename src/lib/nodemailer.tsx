@@ -13,6 +13,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendWelcomeEmail = async (name: string, to: string) => {
+  console.log('email user', to);
   const emailHtml = await render(<WelcomeEmail name={name} />);
 
   await transporter.sendMail({
