@@ -3,23 +3,26 @@ import { render } from '@react-email/render';
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  host: process.env.HOST,
-  port: Number(process.env.PORT),
-  secure: true,
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: false,
   auth: {
-    user: process.env.USER,
-    pass: process.env.PASS,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
+  },
+  tls: {
+    ciphers: 'SSLv3',
+    rejectUnauthorized: false,
   },
 });
 
 export const sendWelcomeEmail = async (name: string, to: string) => {
-  console.log('email user', to);
   const emailHtml = await render(<WelcomeEmail name={name} />);
 
   await transporter.sendMail({
-    from: process.env.USER,
+    from: process.env.SMTP_USER,
     to,
-    subject: 'Bem-vindo ao nosso Blog! 🚀',
+    subject: 'Bem-vindo ao meu cérebro 🧠 ',
     html: emailHtml,
   });
 };
