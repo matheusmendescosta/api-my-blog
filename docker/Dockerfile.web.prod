@@ -5,14 +5,15 @@ RUN apk --no-cache add curl
 WORKDIR /opt/app
 
 COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-RUN npm i
 
 COPY prisma ./prisma
+RUN npx prisma generate
 
 COPY . .
 
-RUN npx prisma generate
+RUN echo $(date +%s) > .cachebuster
 
 RUN npm run build
 
