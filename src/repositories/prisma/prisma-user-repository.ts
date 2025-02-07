@@ -1,11 +1,30 @@
 import { prisma } from '@/lib/prisma';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, Role, User } from '@prisma/client';
 import { UserRepository } from '../user-repository';
 
 export class PrismaUserRepository implements UserRepository {
+  async updateUserPermission(
+    id: string,
+    data: Prisma.UserUpdateInput,
+  ): Promise<{ name: string; id: string; email: string; role: Role; createdAt: Date; updatedAt: Date } | null> {
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return updatedUser;
+  }
   async findAll(
     offset: number = 1,
-    limit: number = 25
+    limit: number = 25,
   ): Promise<{ totalCount: number; hasMore: boolean; offset: number; limit: number; users: Omit<User, 'password'>[] }> {
     const count = await prisma.user.count();
 

@@ -6,7 +6,7 @@ export interface UserRepository {
   findById(id: string): Promise<{ name: string; id: string; email: string; role: Role; createdAt: Date; updatedAt: Date } | null>;
   findAll(
     offset?: number,
-    limit?: number
+    limit?: number,
   ): Promise<{
     totalCount: number;
     hasMore: boolean;
@@ -14,4 +14,8 @@ export interface UserRepository {
     limit: number;
     users: Omit<User, 'password'>[];
   }>;
+  updateUserPermission(
+    id: string,
+    data: Prisma.UserUpdateInput
+  ): Promise<{ name: string; id: string; email: string; role: Role; createdAt: Date; updatedAt: Date } | null>;
 }
