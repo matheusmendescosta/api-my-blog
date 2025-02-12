@@ -7,11 +7,35 @@ import { z } from 'zod';
 const bodySchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
+  captchaToken: z.string(),
 });
+
+const verifyTurnstile = async (captchaToken: string): Promise<boolean> => {
+  try {
+    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        secret: process.env.CLOUDFLARE_TURNSTILE_SECRET as string,
+        response: captchaToken,
+      }),
+    });
+
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.error('Turnstile verification failed:', error);
+    return false;
+  }
+};
 
 const userAuthenticateController = async (request: Request, response: Response, next: NextFunction) => {
   try {
-    const { email, password } = bodySchema.parse(request.body);
+    const { email, password, captchaToken } = bodySchema.parse(request.body);
+    const isHuman = await verifyTurnstile(captchaToken);
+    if (!isHuman) {
+      return response.status(403).json({ message: 'Failed Turnstile verification' });
+    }
 
     const userAuthenticateService = new UserAuthenticateService(new PrismaUserRepository());
 

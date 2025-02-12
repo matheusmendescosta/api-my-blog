@@ -20,6 +20,7 @@ const envSchema = z.object({
   SMTP_PASSWORD: z.string(),
   MAILHOG_SMTP_PORT: z.string(),
   MAILHOG_HTTP_PORT: z.string(),
+  CLOUDFLARE_TURNSTILE_SECRET: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);
