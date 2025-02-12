@@ -11,10 +11,6 @@ const bodySchema = z.object({
 });
 
 const verifyTurnstile = async (captchaToken: string): Promise<boolean> => {
-  if (process.env.NODE_ENV === 'dev') {
-    console.log('Skipping Turnstile verification in development mode');
-    return true;
-  }
   try {
     const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
@@ -36,7 +32,6 @@ const verifyTurnstile = async (captchaToken: string): Promise<boolean> => {
 const userAuthenticateController = async (request: Request, response: Response, next: NextFunction) => {
   try {
     const { email, password, captchaToken } = bodySchema.parse(request.body);
-
     const isHuman = await verifyTurnstile(captchaToken);
     if (!isHuman) {
       return response.status(403).json({ message: 'Failed Turnstile verification' });
