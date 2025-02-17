@@ -1,5 +1,6 @@
 import { UserRepository } from '@/repositories/user-repository';
 import { Role } from '@prisma/client';
+import { UserNotFound } from '../errors/user-not-found';
 
 interface UserGetServiceRequest {
   id: string;
@@ -20,9 +21,7 @@ export class UserGetService {
   async execute({ id }: UserGetServiceRequest): Promise<UserGetServiceResponse> {
     const user = await this.userRepository.findById(id);
 
-    if (!user) {
-      throw new Error('User not found');
-    }
+    if (!user) throw new UserNotFound();
 
     return user;
   }

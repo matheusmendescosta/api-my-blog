@@ -1,8 +1,9 @@
 import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository';
 import { UserAuthenticateService } from '@/services/authenticate/user-authenticate-service';
-import { NextFunction, Request, Response } from 'express';
+import { InvalidCredentialsError } from '@/services/errors/invalid-credentials';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { z } from 'zod';
+import { z, ZodError } from 'zod';
 
 const bodySchema = z.object({
   email: z.string().email(),
@@ -29,7 +30,7 @@ const verifyTurnstile = async (captchaToken: string): Promise<boolean> => {
   }
 };
 
-const userAuthenticateController = async (request: Request, response: Response, next: NextFunction) => {
+const userAuthenticateController = async (request: Request, response: Response) => {
   try {
     const { email, password, captchaToken } = bodySchema.parse(request.body);
     const isHuman = await verifyTurnstile(captchaToken);
@@ -56,7 +57,16 @@ const userAuthenticateController = async (request: Request, response: Response, 
       token,
     });
   } catch (error) {
-    next(error);
+    if (error instanceof ZodError) {
+      return response.status(400).json({
+        error: 'Validation error',
+        details: error.errors,
+      });
+    }
+    if (error instanceof InvalidCredentialsError) {
+      return response.status(401).json({ message: error.message });
+    }
+    console.error(error);
     return response.status(500).json({ message: 'Internal server error' });
   }
 };
