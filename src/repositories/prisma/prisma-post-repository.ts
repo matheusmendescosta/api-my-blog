@@ -10,7 +10,19 @@ export class PrismaPostRepository implements PostRepository {
         _count: {
           select: { likes: true },
         },
-        comments: true,
+        comments: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
+          },
+        },
         category: true,
         tags: true,
       },
@@ -20,7 +32,7 @@ export class PrismaPostRepository implements PostRepository {
   }
   async list(
     offset: number = 1,
-    limit: number = 25
+    limit: number = 25,
   ): Promise<{ totalCount: number; hasMore: boolean; offset: number; limit: number; posts: Post[] }> {
     const count = await prisma.post.count();
 
