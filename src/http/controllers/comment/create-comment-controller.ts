@@ -9,7 +9,8 @@ const routeSchema = z.object({
 
 const bodySchema = z.object({
   content: z.string(),
-  userId: z.string(),
+  userId: z.string().optional(),
+  parentCommentId: z.string().optional(),
 });
 
 export const CreateCommentController = async (request: Request, response: Response) => {
@@ -27,8 +28,7 @@ export const CreateCommentController = async (request: Request, response: Respon
         details: error.errors,
       });
     }
-
+    console.log(error);
     return response.status(500).json({ message: 'Internal server error' });
   }
 };
- 

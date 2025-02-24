@@ -34,9 +34,8 @@ const userAuthenticateController = async (request: Request, response: Response) 
   try {
     const { email, password, captchaToken } = bodySchema.parse(request.body);
     const isHuman = await verifyTurnstile(captchaToken);
-    if (!isHuman) {
-      return response.status(403).json({ message: 'Failed Turnstile verification' });
-    }
+
+    if (!isHuman) return response.status(403).json({ message: 'Failed Turnstile verification' });
 
     const userAuthenticateService = new UserAuthenticateService(new PrismaUserRepository());
 
@@ -63,10 +62,11 @@ const userAuthenticateController = async (request: Request, response: Response) 
         details: error.errors,
       });
     }
+
     if (error instanceof InvalidCredentialsError) {
       return response.status(401).json({ message: error.message });
     }
-    console.error(error);
+
     return response.status(500).json({ message: 'Internal server error' });
   }
 };

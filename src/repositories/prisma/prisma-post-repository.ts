@@ -11,6 +11,9 @@ export class PrismaPostRepository implements PostRepository {
           select: { likes: true },
         },
         comments: {
+          where: {
+            parentCommentId: null,
+          },
           include: {
             user: {
               select: {
@@ -19,6 +22,19 @@ export class PrismaPostRepository implements PostRepository {
                 email: true,
                 createdAt: true,
                 updatedAt: true,
+              },
+            },
+            replies: {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    createdAt: true,
+                    updatedAt: true,
+                  },
+                },
               },
             },
           },
@@ -41,9 +57,8 @@ export class PrismaPostRepository implements PostRepository {
       skip: (offset - 1) * limit,
       include: {
         _count: {
-          select: { likes: true },
+          select: { likes: true, comments: true },
         },
-        comments: true,
         author: {
           select: {
             id: true,
