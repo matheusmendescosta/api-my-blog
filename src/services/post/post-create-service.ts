@@ -1,5 +1,7 @@
 import { PostRepository } from '@/repositories/post-repository';
+import { UserRepository } from '@/repositories/user-repository';
 import { Post, PostStatus } from '@prisma/client';
+import { UserNotFound } from '../errors/user-not-found';
 
 interface CreatePostServiceRequest {
   title: string;
@@ -16,7 +18,10 @@ interface CreatePostServiceResponse {
 }
 
 export class CreatePostService {
-  constructor(private postRepository: PostRepository) {}
+  constructor(
+    private postRepository: PostRepository,
+    private userRepository: UserRepository,
+  ) {}
 
   async execute({
     title,
@@ -27,6 +32,10 @@ export class CreatePostService {
     categoryId,
     tags,
   }: CreatePostServiceRequest): Promise<CreatePostServiceResponse> {
+    const findAuthor = await this.userRepository.findById(authorId);
+
+    if (!findAuthor) throw new UserNotFound();
+
     const post = await this.postRepository.create({
       title,
       slug,

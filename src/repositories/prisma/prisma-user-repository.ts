@@ -22,6 +22,7 @@ export class PrismaUserRepository implements UserRepository {
 
     return updatedUser;
   }
+
   async findAll(
     offset: number = 1,
     limit: number = 25,

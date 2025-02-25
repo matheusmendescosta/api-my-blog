@@ -1,4 +1,6 @@
 import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository';
+import { FailUpdatePermission } from '@/services/errors/fail-update-permission';
+import { UserNotFound } from '@/services/errors/user-not-found';
 import { UserPermissionService } from '@/services/user/user-permission-service';
 import { Role } from '@prisma/client';
 import { Request, Response } from 'express';
@@ -22,7 +24,13 @@ const UserPermissionController = async (request: Request, response: Response) =>
 
     return response.status(200).json(user);
   } catch (error) {
-    console.log(error);
+    if (error instanceof UserNotFound) {
+      return response.status(404).json({ message: error.message });
+    }
+
+    if (error instanceof FailUpdatePermission) {
+      return response.status(400).json({ message: error.message });
+    }
 
     return response.status(500).json({ message: 'Internal server error' });
   }

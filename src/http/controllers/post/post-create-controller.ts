@@ -1,4 +1,6 @@
 import { PrismaPostRepository } from '@/repositories/prisma/prisma-post-repository';
+import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository';
+import { UserNotFound } from '@/services/errors/user-not-found';
 import { CreatePostService } from '@/services/post/post-create-service';
 import { PostStatus } from '@prisma/client';
 import { Request, Response } from 'express';
@@ -21,13 +23,8 @@ export const PostCreateController = async (request: Request, response: Response)
   try {
     const params = routeSchema.parse(request.params);
     const body = bodySchema.parse(request.body);
-    const authorId = request.user?.id;
 
-    if (!authorId) {
-      return response.status(401).json({ message: 'Unauthorized' });
-    }
-
-    const createPostService = new CreatePostService(new PrismaPostRepository());
+    const createPostService = new CreatePostService(new PrismaPostRepository(), new PrismaUserRepository());
     const { post } = await createPostService.execute({ ...body, authorId: params.authorId });
 
     return response.status(201).json({ post });
@@ -37,6 +34,10 @@ export const PostCreateController = async (request: Request, response: Response)
         error: 'validation error',
         details: error.errors,
       });
+    }
+
+    if (error instanceof UserNotFound) {
+      return response.status(404).json({ message: error.message });
     }
 
     return response.status(500).json({ message: 'Internal server error' });

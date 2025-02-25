@@ -3,8 +3,9 @@ import { Comment } from '@prisma/client';
 
 interface CreateCommentServiceRequest {
   content: string;
-  userId: string;
   postId: string;
+  userId?: string;
+  parentCommentId?: string;
 }
 
 interface CreateCommentServiceResponse {
@@ -14,8 +15,8 @@ interface CreateCommentServiceResponse {
 export class CreateCommentService {
   constructor(private commentRepository: CommentRepository) {}
 
-  async execute({ content, userId, postId }: CreateCommentServiceRequest): Promise<CreateCommentServiceResponse> {
-    const comment = await this.commentRepository.create({ content, userId, postId });
+  async execute({ content, userId, postId, parentCommentId }: CreateCommentServiceRequest): Promise<CreateCommentServiceResponse> {
+    const comment = await this.commentRepository.create({ content, userId, postId, parentCommentId });
 
     return { comment };
   }
