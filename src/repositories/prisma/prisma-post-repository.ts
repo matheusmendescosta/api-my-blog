@@ -1,8 +1,16 @@
-import { Prisma, Post } from '@prisma/client';
+import { Prisma, Post, PostStatus } from '@prisma/client';
 import { PostRepository } from '../post-repository';
 import { prisma } from '@/lib/prisma';
 
 export class PrismaPostRepository implements PostRepository {
+  async update(postId: string, data: Prisma.PostUpdateInput): Promise<Post> {
+    const post = await prisma.post.update({
+      where: { id: postId },
+      data,
+    });
+
+    return post;
+  }
   async get(id: string): Promise<Post | null> {
     const post = await prisma.post.findUnique({
       where: { id },
@@ -47,14 +55,20 @@ export class PrismaPostRepository implements PostRepository {
     return post;
   }
   async list(
+    draft: boolean = false,
     offset: number = 1,
     limit: number = 25,
   ): Promise<{ totalCount: number; hasMore: boolean; offset: number; limit: number; posts: Post[] }> {
-    const count = await prisma.post.count();
+    const whereCondition = draft ? {} : { status: PostStatus.PUBLISHED };
+
+    const count = await prisma.post.count({
+      where: whereCondition,
+    });
 
     const posts = await prisma.post.findMany({
       take: limit,
       skip: (offset - 1) * limit,
+      where: whereCondition,
       include: {
         _count: {
           select: { likes: true, comments: true },
