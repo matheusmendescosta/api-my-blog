@@ -4,18 +4,20 @@ import { Request, Response } from 'express';
 import { z, ZodError } from 'zod';
 
 const searchBodySchema = z.object({
+  draft: z.coerce.boolean().default(false),
   offset: z.coerce.number().optional(),
   limit: z.coerce.number().min(1, 'Must have at least 1 item').max(100, 'must have less than 100 items').optional(),
 });
 
 export const PostListController = async (request: Request, response: Response) => {
   try {
-    const { offset, limit } = searchBodySchema.parse(request.query);
+    const { offset, limit, draft } = searchBodySchema.parse(request.query);
 
     const postListController = new ListPostService(new PrismaPostRepository());
     const { posts } = await postListController.execute({
       offset,
       limit,
+      draft,
     });
     return response.status(200).json(posts);
   } catch (error) {
