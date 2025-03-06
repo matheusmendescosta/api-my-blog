@@ -3,7 +3,7 @@ import { PostLike } from '@prisma/client';
 
 interface CreateLikeServiceRequest {
   postId: string;
-  userId: string;
+  userId?: string;
 }
 
 interface CreateLikeServiceResponse {

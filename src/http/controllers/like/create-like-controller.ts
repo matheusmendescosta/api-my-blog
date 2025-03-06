@@ -8,7 +8,7 @@ const routeSchema = z.object({
 });
 
 const bodySchema = z.object({
-  userId: z.string(),
+  userId: z.string().optional(),
 });
 
 export const CreateLikeController = async (request: Request, response: Response) => {
@@ -18,7 +18,7 @@ export const CreateLikeController = async (request: Request, response: Response)
     const createLikeService = new CreateLikeService(new PrismaLikeRepository());
     const like = await createLikeService.execute({ ...body, postId: params.postId });
 
-    return response.status(201).json({ like });
+    return response.status(201).json(like);
   } catch (error) {
     if (error instanceof ZodError) {
       response.status(400).json({
@@ -26,7 +26,7 @@ export const CreateLikeController = async (request: Request, response: Response)
         details: error.errors,
       });
     }
-
-    return response.status(500).json({ message: 'Internal server error' });
+    console.log(error);
   }
+  return response.status(500).json({ message: 'Internal server error' });
 };
