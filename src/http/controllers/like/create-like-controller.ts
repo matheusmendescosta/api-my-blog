@@ -15,8 +15,11 @@ export const CreateLikeController = async (request: Request, response: Response)
   try {
     const params = routeSchema.parse(request.params);
     const body = bodySchema.parse(request.body);
+    const userIp = request.ip; //take address ip user
     const createLikeService = new CreateLikeService(new PrismaLikeRepository());
     const like = await createLikeService.execute({ ...body, postId: params.postId });
+
+    console.log(userIp); //take address ip user
 
     return response.status(201).json(like);
   } catch (error) {
