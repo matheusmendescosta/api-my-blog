@@ -1,4 +1,5 @@
 import { PrismaLikeRepository } from '@/repositories/prisma/prisma-like-repository';
+import { IpAlreadyLiked } from '@/services/errors/ip-already-liked';
 import { CreateLikeService } from '@/services/like/create-like-service';
 import { Request, Response } from 'express';
 import { z, ZodError } from 'zod';
@@ -15,12 +16,9 @@ export const CreateLikeController = async (request: Request, response: Response)
   try {
     const params = routeSchema.parse(request.params);
     const body = bodySchema.parse(request.body);
-    const userIp = request.ip; //take address ip user
+    const userIp = request.ip;
     const createLikeService = new CreateLikeService(new PrismaLikeRepository());
-    const like = await createLikeService.execute({ ...body, postId: params.postId });
-
-    console.log(userIp); //take address ip user
-
+    const like = await createLikeService.execute({ ...body, postId: params.postId, ip: userIp || '' });
     return response.status(201).json(like);
   } catch (error) {
     if (error instanceof ZodError) {
@@ -29,7 +27,9 @@ export const CreateLikeController = async (request: Request, response: Response)
         details: error.errors,
       });
     }
-    console.log(error);
+    if (error instanceof IpAlreadyLiked) {
+      return response.status(403).json({ message: error.message });
+    }
   }
   return response.status(500).json({ message: 'Internal server error' });
 };
