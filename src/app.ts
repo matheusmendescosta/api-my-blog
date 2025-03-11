@@ -10,11 +10,13 @@ import authRoute from './http/routes/route';
 
 const app = express();
 
+app.use(express.json());
+
 app.use(cors());
 
 const baseUrl = '/api/v1/';
 
-app.use(express.json());
+app.set('trust proxy', true);
 
 app.use(baseUrl + 'health', (_, response) => {
   response.status(200).json({
