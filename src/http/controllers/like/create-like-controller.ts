@@ -16,7 +16,9 @@ export const CreateLikeController = async (request: Request, response: Response)
   try {
     const params = routeSchema.parse(request.params);
     const body = bodySchema.parse(request.body);
-    const userIp = request.ip;
+    const forwarded = request.headers['x-forwarded-for'] as string;
+    const userIp = forwarded ? forwarded.split(',')[0].trim() : request.ip;
+
     const createLikeService = new CreateLikeService(new PrismaLikeRepository());
     const like = await createLikeService.execute({ ...body, postId: params.postId, ip: userIp || '' });
     return response.status(201).json(like);
@@ -30,6 +32,7 @@ export const CreateLikeController = async (request: Request, response: Response)
     if (error instanceof IpAlreadyLiked) {
       return response.status(403).json({ message: error.message });
     }
+    console.log(error);
   }
   return response.status(500).json({ message: 'Internal server error' });
 };
