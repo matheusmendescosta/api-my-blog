@@ -1,7 +1,7 @@
+import { SendPost } from '@/lib/nodemailer';
 import { PostRepository } from '@/repositories/post-repository';
 import { Post } from '@prisma/client';
 import { PostNotFound } from '../errors/post-not-found';
-import { sendWelcomeEmail } from '@/lib/nodemailer';
 
 interface PostSaveServiceRequest {
   postId: string;
@@ -20,8 +20,7 @@ export class PostSaveService {
 
     if (!post) throw new PostNotFound();
 
-    //TODO: change for template save post
-    await sendWelcomeEmail(email, postId);
+    await SendPost(email, postId, post.title);
 
     return { post };
   }
