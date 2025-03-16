@@ -2,7 +2,9 @@ name: api-brain-ci-alpha
 
 on:
   push:
-    branches: 'main'
+    branches: ['main']
+  pull_request:
+    branches: ['main']
 
 env:
   WEB_CONTAINER_ALPHA_IMAGE: ${{ vars.CI_REGISTRY_IMAGE_WEB }}:${{ github.sha }}.alpha
