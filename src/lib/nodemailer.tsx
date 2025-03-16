@@ -4,15 +4,13 @@ import { render } from '@react-email/render';
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  host: process.env.NODE_ENV ? 'mailhog' : process.env.SMTP_HOST,
-  port: process.env.NODE_ENV ? 1025 : Number(process.env.SMTP_PORT),
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
   secure: false,
-  auth: process.env.NODE_ENV
-    ? null
-    : {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
+  },
   tls: {
     ciphers: 'SSLv3',
     rejectUnauthorized: false,
