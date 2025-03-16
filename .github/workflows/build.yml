@@ -1,4 +1,4 @@
-name: api-my-blog-ci-test
+name: api-my-blog-ci-build
 
 on:
   push:
