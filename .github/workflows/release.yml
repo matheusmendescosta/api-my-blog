@@ -2,12 +2,12 @@ name: api-brain-ci-alpha
 
 on:
   push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+    tags:
+      - v1.**
 
 env:
-  WEB_CONTAINER_ALPHA_IMAGE: ${{ vars.CI_REGISTRY_IMAGE_WEB }}:${{ github.sha }}.alpha
+  WEB_CONTAINER_PRODUCTION_IMAGE: ${{ vars.CI_REGISTRY_IMAGE_WEB }}:latest
+  WEB_CONTAINER_PRODUCTION_TAG_IMAGE: ${{ vars.CI_REGISTRY_IMAGE_WEB }}:${{ github.ref_name }}
 
 jobs:
   build:
@@ -45,4 +45,5 @@ jobs:
           push: true
           context: .
           tags: |
-            ${{ env.WEB_CONTAINER_ALPHA_IMAGE }}
+            ${{ env.WEB_CONTAINER_PRODUCTION_IMAGE }}
+            ${{ env.WEB_CONTAINER_PRODUCTION_TAG_IMAGE }}
