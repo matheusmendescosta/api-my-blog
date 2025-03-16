@@ -23,7 +23,7 @@ export const sendWelcomeEmail = async (name: string, to: string) => {
   const emailHtml = await render(<WelcomeEmail name={name} />);
 
   await transporter.sendMail({
-    from: '<no-replay@matheusmendes.fun>',
+    from: process.env.SMTP_USER,
     to,
     subject: 'Bem-vindo ao meu cérebro 🧠 ',
     html: emailHtml,
@@ -34,7 +34,7 @@ export const SendPost = async (to: string, postId: string, postTitle: string) =>
   const emailHtml = await render(<SendPostEmail postId={postId} postTitle={postTitle} />);
 
   await transporter.sendMail({
-    from: '<no-replay@matheusmendes.fun>',
+    from: process.env.SMTP_USER,
     to,
     subject: 'Entregamos o seu artigo! Veja aqui 🧠',
     html: emailHtml,
