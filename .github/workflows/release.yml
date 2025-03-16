@@ -1,4 +1,4 @@
-name: api-brain-ci-alpha
+name: api-brain-ci-release
 
 on:
   push:
