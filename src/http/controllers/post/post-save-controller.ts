@@ -27,6 +27,7 @@ export const PostSaveController = async (request: Request, response: Response) =
         message: error.message,
       });
     }
+    console.log(error);
   }
   return response.status(500).json({ message: 'Internal server error' });
 };
