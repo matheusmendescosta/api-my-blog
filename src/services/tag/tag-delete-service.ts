@@ -14,9 +14,11 @@ export class TagDeleteService {
   constructor(private tagRepository: TagRepository) {}
 
   async execute({ id }: TagDeleteServiceRequest): Promise<TagDeleteServiceResponse> {
-    const tag = await this.tagRepository.deleteById(id);
+    const findIdBy = await this.tagRepository.getById(id);
 
-    if (!tag) throw new TagNotFound();
+    if (!findIdBy) throw new TagNotFound();
+    
+    const tag = await this.tagRepository.deleteById(id);
 
     return { tag };
   }

@@ -18,7 +18,7 @@ export const TagDeleteController = async (request: Request, response: Response) 
     return response.status(200).json({ message: 'Tag deleted successfully', tag });
   } catch (error) {
     if (error instanceof TagNotFound) {
-      return response.status(404).json({ error: error.message });
+      return response.status(404).json({ message: error.message });
     }
     if (error instanceof z.ZodError) {
       return response.status(400).json({
@@ -26,7 +26,7 @@ export const TagDeleteController = async (request: Request, response: Response) 
         details: error.errors,
       });
     }
-    console.log(error)
   }
+
   return response.status(500).json({ message: 'Internal server error' });
 };

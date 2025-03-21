@@ -3,6 +3,12 @@ import { TagRepository } from '../tag-repository';
 import { prisma } from '@/lib/prisma';
 
 export class PrismaTagRepository implements TagRepository {
+  async findBySlug(slug: string): Promise<Tag | null> {
+    const tag = await prisma.tag.findFirst({
+      where: { slug },
+    });
+    return tag;
+  }
   async getById(id: string): Promise<Tag | null> {
     const tag = await prisma.tag.findUnique({
       where: { id },
