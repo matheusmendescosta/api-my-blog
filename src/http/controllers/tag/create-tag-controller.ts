@@ -1,4 +1,5 @@
 import { PrismaTagRepository } from '@/repositories/prisma/prisma-tag-repository';
+import { TagAlreadyExists } from '@/services/errors/tag-already-exists';
 import { CreateTagService } from '@/services/tag/create-tag-service';
 import { Request, Response } from 'express';
 import { z, ZodError } from 'zod';
@@ -16,6 +17,9 @@ export const CreateTagController = async (request: Request, response: Response) 
 
     return response.status(201).json(tag);
   } catch (error) {
+    if (error instanceof TagAlreadyExists) {
+      return response.status(409).json({ message: error.message });
+    }
     if (error instanceof ZodError) {
       return response.status(400).json({
         error: 'validation error',
