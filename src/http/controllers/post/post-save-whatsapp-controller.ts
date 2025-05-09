@@ -10,6 +10,7 @@ const routeSchema = z.object({
 
 const bodySchema = z.object({
   phone: z.string(),
+  name: z.string(),
 });
 
 export const PostSaveWhatsAppController = async (request: Request, response: Response) => {

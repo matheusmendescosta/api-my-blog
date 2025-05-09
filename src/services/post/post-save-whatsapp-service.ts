@@ -5,6 +5,7 @@ import { PostNotFound } from '../errors/post-not-found';
 interface PostSaveWhatsAppServiceRequest {
   postId: string;
   phone: string;
+  name: string;
 }
 
 interface PostSaveWhatsAppServiceResponse {
@@ -14,7 +15,7 @@ interface PostSaveWhatsAppServiceResponse {
 export class PostSaveWhatsAppService {
   constructor(private postRepository: PostRepository) {}
 
-  async execute({ phone, postId }: PostSaveWhatsAppServiceRequest): Promise<PostSaveWhatsAppServiceResponse> {
+  async execute({ phone, postId, name }: PostSaveWhatsAppServiceRequest): Promise<PostSaveWhatsAppServiceResponse> {
     const post = await this.postRepository.get(postId);
 
     if (!post) throw new PostNotFound();
@@ -27,7 +28,7 @@ export class PostSaveWhatsAppService {
       },
       body: JSON.stringify({
         number: phone,
-        text: `Hello look you article ${process.env.NEXT_PUBLIC_BASE_URL}/post/${postId}`,
+        text: `Olá ${name}!\nSegue o link do post do my brain 🧠\n\n${process.env.NEXT_PUBLIC_BASE_URL}/post/${postId}`,
       }),
     });
 
