@@ -78,7 +78,7 @@ networks:
   backend-network:
     name: backend-network
     driver: bridge
-    external: true
+    external: false
 
 volumes:
   pgadmin_data:
