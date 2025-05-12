@@ -21,6 +21,10 @@ const envSchema = z.object({
   MAILHOG_SMTP_PORT: z.string(),
   MAILHOG_HTTP_PORT: z.string(),
   CLOUDFLARE_TURNSTILE_SECRET: z.string(),
+  EVOLUTION_API_URL: z.string(),
+  EVOLUTION_API_INSTANCE: z.string(),
+  EVOLUTION_API_KEY: z.string(),
+  NEXT_PUBLIC_BASE_URL: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);
