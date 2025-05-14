@@ -28,7 +28,7 @@ export class PostSaveWhatsAppService {
       },
       body: JSON.stringify({
         number: phone,
-        text: `Olá ${name}!\nSegue o link do post do my brain 🧠\n\n${process.env.NEXT_PUBLIC_BASE_URL}/post/${postId}`,
+        text: `Olá ${name}!\nSegue o link do post do my brain 🧠\n\n${process.env.NEXT_PUBLIC_BASE_URL}/brain/post/${postId}`,
       }),
     });
 
