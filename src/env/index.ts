@@ -25,6 +25,8 @@ const envSchema = z.object({
   EVOLUTION_API_INSTANCE: z.string(),
   EVOLUTION_API_KEY: z.string(),
   NEXT_PUBLIC_BASE_URL: z.string(),
+  DEEPSEEK_API_URL: z.string(),
+  DEEPSEEK_API_KEY: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

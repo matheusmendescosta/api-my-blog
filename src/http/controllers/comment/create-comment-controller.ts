@@ -1,4 +1,5 @@
 import { PrismaCommentRepository } from '@/repositories/prisma/prisma-comment-repository';
+import { PrismaPostRepository } from '@/repositories/prisma/prisma-post-repository';
 import { CreateCommentService } from '@/services/comment/create-comment-repository';
 import { Request, Response } from 'express';
 import { z, ZodError } from 'zod';
@@ -17,7 +18,7 @@ export const CreateCommentController = async (request: Request, response: Respon
   try {
     const body = bodySchema.parse(request.body);
     const params = routeSchema.parse(request.params);
-    const createCommentService = new CreateCommentService(new PrismaCommentRepository());
+    const createCommentService = new CreateCommentService(new PrismaCommentRepository(), new PrismaPostRepository());
     const { comment } = await createCommentService.execute({ ...body, postId: params.postId });
 
     return response.status(201).json({ comment });
@@ -28,7 +29,7 @@ export const CreateCommentController = async (request: Request, response: Respon
         details: error.errors,
       });
     }
-    console.log(error);
+
     return response.status(500).json({ message: 'Internal server error' });
   }
 };
