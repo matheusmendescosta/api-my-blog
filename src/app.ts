@@ -7,6 +7,8 @@ import postRoute from './http/controllers/post/route';
 import tagRoute from './http/controllers/tag/route';
 import userRoute from './http/controllers/user/route';
 import authRoute from './http/routes/route';
+import '../instrument';
+import * as Sentry from '@sentry/node';
 
 const app = express();
 
@@ -18,10 +20,18 @@ const baseUrl = '/api/v1/';
 
 app.set('trust proxy', true);
 
+Sentry.setupExpressErrorHandler(app);
+
+app.get(baseUrl + 'debug-sentry', (_, res, next) => {
+  try {
+    throw new Error('Test Sentry error!');
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use(baseUrl + 'health', (_, response) => {
-  response.status(200).json({
-    message: 'health',
-  });
+  response.status(200).json({ message: 'health' });
 });
 
 app.use(baseUrl, authRoute);
